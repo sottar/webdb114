@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import styles from './App.module.css';
+import { LoginForm } from './components/LoginForm';
 
 interface Chat {
   name: string;
@@ -70,12 +71,7 @@ const App: React.FC = () => {
   };
 
   if (displayLoginForm) {
-    return (
-      <div>
-        login name: <input type="text" value={loginName} onChange={changeLoginNameHandler} />
-        <button onClick={loginHandler}>login</button>
-      </div>
-    );
+    return <LoginForm inputtedValue={loginName} changeHandler={changeLoginNameHandler} loginHandler={loginHandler} />;
   }
 
   return (
