@@ -10,11 +10,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/foo', (req, res) => {
-  res.send({ hoge: 'fooo' });
-  // res.json({ hoge: 'fooo' });
-});
-
 io.on('connection', socket => {
   console.log('a user connected');
   socket.broadcast.emit('hi');
