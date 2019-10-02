@@ -1,0 +1,25 @@
+{
+  "name": "chat-app-websocket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "run-p run:client run:server",
+    "run:client": "cd ./client; npm run start",
+    "run:server": "npx nodemon ./server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sottar/chat-app-websocket.git"
+  },
+  "author": "sottar <ohrst.18@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sottar/chat-app-websocket/issues"
+  },
+  "homepage": "https://github.com/sottar/chat-app-websocket#readme",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
