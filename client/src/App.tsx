@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import { call } from './api';
 import styles from './App.module.css';
 
 const App: React.FC = () => {
@@ -16,7 +15,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     socket &&
-      socket.on('chat message', (msg: string) => {
+      socket.on('chat', (msg: string) => {
         setReceivedMessage(msg);
         console.log(`receive message: ${msg}`);
       });
@@ -27,7 +26,7 @@ const App: React.FC = () => {
       return;
     }
     setMessageList([...messageList, receivedMessage]);
-  }, [receivedMessage]);
+  }, [receivedMessage]); // eslint-disable-line
 
   const onChangeHandler = (e: React.SyntheticEvent<HTMLInputElement>) => {
     setInputtedValue(e.currentTarget.value);
