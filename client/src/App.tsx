@@ -31,7 +31,7 @@ const App: React.FC = () => {
       setReceivedMessage({ name: name, msg: 'joined!' });
     });
     socket.on('left', (name: string) => {
-      setReceivedMessage({ name: name, msg: 'left.' });
+      setReceivedMessage({ name: name, msg: 'left this group.' });
     });
   }, [socket]);
 

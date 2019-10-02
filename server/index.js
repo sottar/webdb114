@@ -2,6 +2,8 @@ var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
+const users = {};
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -20,6 +22,8 @@ io.on('connection', socket => {
   socket.on('join', name => {
     console.log(`joined: ${name}`);
     io.emit('joined', name);
+    users[socket.id] = name;
+    console.log(users);
   });
 
   socket.on('chat message', ({ name, msg }) => {
@@ -27,13 +31,11 @@ io.on('connection', socket => {
     io.emit('chat', { name, msg });
   });
 
-  socket.on('leave', name => {
-    console.log('user left');
-    io.emit('left', name);
-  });
-
   socket.on('disconnect', e => {
+    console.log('id', socket.id);
     console.log('disconnected');
+    io.emit('left', users[socket.id]);
+    delete users[socket.id];
   });
 });
 
