@@ -10,7 +10,7 @@
   text-align: left;
 }
 .message li {
-  padding: 5px 10px;
+  padding: 2px 10px 5px;
 }
 .message li:nth-child(odd) {
   background: #eee;
@@ -38,4 +38,12 @@
 }
 .submitButton {
   width: 15%;
+}
+
+.name{
+  font-size: 12px;
+  color: #777;
+}
+.msg {
+  margin: 3px 0 0;
 }

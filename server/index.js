@@ -15,16 +15,25 @@ app.get('/foo', (req, res) => {
 
 io.on('connection', socket => {
   console.log('a user connected');
-
   socket.broadcast.emit('hi');
 
-  socket.on('chat message', msg => {
-    console.log(`message: ${msg}`);
-    io.emit('chat', msg);
+  socket.on('join', name => {
+    console.log(`joined: ${name}`);
+    io.emit('joined', name);
   });
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
+  socket.on('chat message', ({ name, msg }) => {
+    console.log(`message: ${msg}`);
+    io.emit('chat', { name, msg });
+  });
+
+  socket.on('leave', name => {
+    console.log('user left');
+    io.emit('left', name);
+  });
+
+  socket.on('disconnect', e => {
+    console.log('disconnected');
   });
 });
 

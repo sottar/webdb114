@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import styles from './App.module.css';
 
+interface Chat {
+  name: string;
+  msg: string;
+}
+
 const App: React.FC = () => {
-  const [messageList, setMessageList] = useState<string[]>([]);
-  const [receivedMessage, setReceivedMessage] = useState('');
+  const [displayLoginForm, setDisplayLoginForm] = useState(true);
+  const [loginName, setLoginName] = useState('');
+  const [messageList, setMessageList] = useState<Chat[]>([]);
+  const [receivedMessage, setReceivedMessage] = useState<Chat>({ name: '', msg: '' });
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const [inputtedValue, setInputtedValue] = useState('');
 
@@ -14,15 +21,22 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    socket &&
-      socket.on('chat', (msg: string) => {
-        setReceivedMessage(msg);
-        console.log(`receive message: ${msg}`);
-      });
+    if (!socket) {
+      return;
+    }
+    socket.on('chat', (chat: Chat) => {
+      setReceivedMessage(chat);
+    });
+    socket.on('joined', (name: string) => {
+      setReceivedMessage({ name: name, msg: 'joined!' });
+    });
+    socket.on('left', (name: string) => {
+      setReceivedMessage({ name: name, msg: 'left.' });
+    });
   }, [socket]);
 
   useEffect(() => {
-    if (messageList.length === 0 && receivedMessage === '') {
+    if (messageList.length === 0 && receivedMessage.msg === '') {
       return;
     }
     setMessageList([...messageList, receivedMessage]);
@@ -38,17 +52,40 @@ const App: React.FC = () => {
     }
 
     e.preventDefault();
-    socket.emit('chat message', inputtedValue);
+    socket.emit('chat message', { name: loginName, msg: inputtedValue });
     setInputtedValue('');
   };
 
-  console.log(messageList);
+  const changeLoginNameHandler = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    setLoginName(e.currentTarget.value);
+  };
+
+  const loginHandler = () => {
+    if (!socket) {
+      return;
+    }
+
+    socket.emit('join', loginName);
+    setDisplayLoginForm(false);
+  };
+
+  if (displayLoginForm) {
+    return (
+      <div>
+        login name: <input type="text" value={loginName} onChange={changeLoginNameHandler} />
+        <button onClick={loginHandler}>login</button>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.app}>
       <ul className={styles.message}>
-        {messageList.map((m, i) => (
-          <li key={`${m}${i}`}>{m}</li>
+        {messageList.map((c, i) => (
+          <li key={`${c.msg}${i}`}>
+            <span className={styles.name}>{c.name}</span>
+            <p className={styles.msg}>{c.msg}</p>
+          </li>
         ))}
       </ul>
       <div className={styles.inputWrapper}>
