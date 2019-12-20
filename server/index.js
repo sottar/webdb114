@@ -14,6 +14,11 @@ io.on('connection', socket => {
   console.log('a user connected');
   socket.broadcast.emit('hi');
 
+  socket.on('sendMessage', msg => {
+    console.log(`message: ${msg}`);
+    io.emit('receiveMessage', msg); // 2
+  });
+
   socket.on('join', name => {
     console.log(`joined: ${name}`);
     io.emit('joined', name);

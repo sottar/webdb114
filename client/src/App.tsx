@@ -25,6 +25,9 @@ const App: React.FC = () => {
     if (!socket) {
       return;
     }
+    socket.on('receiveMessage', (message: Chat) => {
+      setReceivedMessage(message);
+    });
     socket.on('chat', (chat: Chat) => {
       setReceivedMessage(chat);
     });
@@ -53,7 +56,7 @@ const App: React.FC = () => {
     }
 
     e.preventDefault();
-    socket.emit('chat message', { name: loginName, msg: inputtedValue });
+    socket.emit('sendMessage', { name: loginName, msg: inputtedValue });
     setInputtedValue('');
   };
 

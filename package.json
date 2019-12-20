@@ -6,7 +6,7 @@
   "scripts": {
     "start": "run-p run:client run:server",
     "run:client": "cd ./client; npm run start",
-    "run:server": "npx nodemon ./server/index.js",
+    "run:server": "node ./server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
